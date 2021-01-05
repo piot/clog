@@ -20,7 +20,7 @@ jobs:
         run: go get github.com/piot/deps/src/deps
 
       - name: deps fetch
-        run: /home/runner/go/bin/deps fetch -m clone
+        run: $HOME/go/bin/deps fetch -m clone
 
       - name: build
         run: cmake .
