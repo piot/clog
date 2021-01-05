@@ -23,7 +23,7 @@ jobs:
         run: go get github.com/piot/deps/src/deps
 
       - name: deps fetch
-        run: deps fetch -m clone
+        run: /home/runner/go/bin/deps fetch -m clone
 
       - name: build
         run: cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON .
