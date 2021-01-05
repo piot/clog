@@ -20,7 +20,7 @@ jobs:
         run: go get github.com/piot/deps/src/deps
 
       - name: deps fetch
-        run: deps fetch -m clone
+        run: /home/runner/go/bin/deps fetch -m clone
 
       - name: build
         run: cmake .
@@ -34,4 +34,4 @@ jobs:
         with:
           name: CLog MacOS Library
           path: |
-            src/lib/libclog.a
+            src/libclog.a
