@@ -36,7 +36,7 @@ extern clog_config g_clog;
     }
 
 #if defined CONFIGURATION_DEBUG
-
+#define CLOG_LOG_ENABLED 1
 #define CLOG_VERBOSE(...) CLOG_EX(CLOG_TYPE_VERBOSE, __VA_ARGS__)
 #define CLOG_INFO(...) CLOG_EX(CLOG_TYPE_INFO, __VA_ARGS__)
 #define CLOG_DEBUG(...) CLOG_EX(CLOG_TYPE_DEBUG, __VA_ARGS__)

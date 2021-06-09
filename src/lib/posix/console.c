@@ -8,7 +8,7 @@
 #include <sys/time.h>
 #include <time.h>
 
-static const int level_colors[] = {94, 36, 32, 36, 33, 31, 35};
+static const int level_colors[] = {94, 36, 34, 36, 33, 31, 35};
 
 void clog_console(enum clog_type type, const char* string)
 {
