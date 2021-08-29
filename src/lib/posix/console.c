@@ -5,7 +5,31 @@
 #include <clog/console.h>
 
 #include <stdio.h>
+#if TORNADO_OS_WINDOWS
+
+#include <stdint.h>
+int gettimeofday(struct timeval* tp, struct timezone* tzp)
+{
+    static const uint64_t EPOCH = ((uint64_t) 116444736000000000ULL);
+
+    SYSTEMTIME systemTime;
+    GetSystemTime(&systemTime);
+
+
+    FILETIME fileTime;
+    SystemTimeToFileTime(&systemTime, &fileTime);
+    uint64_t time = ((uint64_t) fileTime.dwLowDateTime);
+    time += ((uint64_t) fileTime.dwHighDateTime) << 32;
+
+    tp->tv_sec = (long) ((time - EPOCH) / 10000000L);
+    tp->tv_usec = (long) (fileTime.wMilliseconds * 1000);
+
+    return 0;
+}
+
+#else
 #include <sys/time.h>
+#endif
 #include <time.h>
 
 static const int level_colors[] = {94, 36, 34, 36, 33, 31, 35};
