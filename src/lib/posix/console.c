@@ -22,7 +22,7 @@ int gettimeofday(struct timeval* tp, struct timezone* tzp)
     time += ((uint64_t) fileTime.dwHighDateTime) << 32;
 
     tp->tv_sec = (long) ((time - EPOCH) / 10000000L);
-    tp->tv_usec = (long) (fileTime.wMilliseconds * 1000);
+    tp->tv_usec = (long) (systemTime.wMilliseconds * 1000);
 
     return 0;
 }
