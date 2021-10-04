@@ -30,7 +30,7 @@ extern clog_config g_clog;
 
 #define CLOG_EX(logtype, ...)                                                                                          \
     {                                                                                                                  \
-        char _temp_str[16 * 1024];                                                                                     \
+        char _temp_str[64 * 1024];                                                                                     \
         sprintf(_temp_str, __VA_ARGS__);                                                                               \
         g_clog.log(logtype, _temp_str);                                                                                \
     }
