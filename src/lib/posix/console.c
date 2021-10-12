@@ -32,7 +32,7 @@ int gettimeofday(struct timeval* tp, struct timezone* tzp)
 #endif
 #include <time.h>
 
-static const int level_colors[] = {94, 36, 34, 36, 33, 31, 35};
+static const int level_colors[] = {34, 36, 94, 36, 33, 31, 35};
 
 void clog_console(enum clog_type type, const char* string)
 {
