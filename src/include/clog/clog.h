@@ -27,12 +27,12 @@ typedef struct clog_config {
 } clog_config;
 
 extern clog_config g_clog;
+extern char g_clog_temp_str[];                                                                                     \
 
 #define CLOG_EX(logtype, ...)                                                                                          \
     {                                                                                                                  \
-        char _temp_str[64 * 1024];                                                                                     \
-        sprintf(_temp_str, __VA_ARGS__);                                                                               \
-        g_clog.log(logtype, _temp_str);                                                                                \
+        sprintf(g_clog_temp_str, __VA_ARGS__);                                                                               \
+        g_clog.log(logtype, g_clog_temp_str);                                                                                \
     }
 
 #if defined CONFIGURATION_DEBUG
