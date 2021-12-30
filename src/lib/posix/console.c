@@ -55,4 +55,5 @@ void clog_console(enum clog_type type, const char* string)
 
 	fprintf(stderr, "\033[%dm%s %s: %s \033[0m\n", level_colors[type], buffer,
 			clog_type_string[type], string);
+    fflush(stderr);
 }
