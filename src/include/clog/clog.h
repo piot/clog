@@ -27,11 +27,24 @@ typedef struct clog_config {
 } clog_config;
 
 extern clog_config g_clog;
-extern char g_clog_temp_str[];                                                                                     \
+#define CLOG_TEMP_STR_SIZE (128*1024)
+
+#if TORNADO_OS_LINUX
+#define CLOG_PLATFORM_SPRINTF_S(target, size, ...) sprintf(target,  __VA_ARGS__)
+#else
+#define CLOG_PLATFORM_SPRINTF_S sprintf_s
+#endif
+
+extern char g_clog_temp_str[];
+
+#define CLOG_BREAK abort()
 
 #define CLOG_EX(logtype, ...)                                                                                          \
     {                                                                                                                  \
-        sprintf(g_clog_temp_str, __VA_ARGS__);                                                                               \
+        int __err = CLOG_PLATFORM_SPRINTF_S(g_clog_temp_str, CLOG_TEMP_STR_SIZE, __VA_ARGS__);                           \
+        if (__err < 0) {                                                                                                 \
+            CLOG_BREAK;                                                                                                               \
+        }                                                                                                               \
         g_clog.log(logtype, g_clog_temp_str);                                                                                \
     }
 
@@ -42,7 +55,7 @@ extern char g_clog_temp_str[];                                                  
 #define CLOG_DEBUG(...) CLOG_EX(CLOG_TYPE_DEBUG, __VA_ARGS__)
 #define CLOG_WARN(...) CLOG_EX(CLOG_TYPE_WARN, __VA_ARGS__)
 #define CLOG_SOFT_ERROR(...) CLOG_WARN(__VA_ARGS__);
-#define CLOG_BREAK abort()
+
 #define CLOG_ERROR(...)                                                                                                \
     CLOG_EX(CLOG_TYPE_ERROR, __VA_ARGS__);                                                                             \
     CLOG_OUTPUT(__VA_ARGS__);                                                                                          \
