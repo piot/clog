@@ -29,7 +29,7 @@ typedef struct clog_config {
 extern clog_config g_clog;
 #define CLOG_TEMP_STR_SIZE (128*1024)
 
-#if TORNADO_OS_LINUX
+#if TORNADO_OS_LINUX || TORNADO_OS_MACOS
 #define CLOG_PLATFORM_SPRINTF_S(target, size, ...) sprintf(target,  __VA_ARGS__)
 #else
 #define CLOG_PLATFORM_SPRINTF_S sprintf_s
