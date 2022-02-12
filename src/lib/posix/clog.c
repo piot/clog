@@ -1,1 +1,3 @@
-char g_clog_temp_str[64 * 1024];
+#include <clog/clog.h>
+
+char g_clog_temp_str[CLOG_TEMP_STR_SIZE];
