@@ -41,8 +41,8 @@ extern char g_clog_temp_str[];
 
 #define CLOG_EX(logtype, ...)                                                                                          \
     {                                                                                                                  \
-        int __err = CLOG_PLATFORM_SPRINTF_S(g_clog_temp_str, CLOG_TEMP_STR_SIZE, __VA_ARGS__);                           \
-        if (__err < 0) {                                                                                                 \
+        int _err = CLOG_PLATFORM_SPRINTF_S(g_clog_temp_str, CLOG_TEMP_STR_SIZE, __VA_ARGS__);                           \
+        if (_err < 0) {                                                                                                 \
             CLOG_BREAK;                                                                                                               \
         }                                                                                                               \
         g_clog.log(logtype, g_clog_temp_str);                                                                                \
