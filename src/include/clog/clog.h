@@ -89,4 +89,11 @@ extern char g_clog_temp_str[];
         tc_fflush(stdout);                                                                                             \
     }
 
+#define CLOG_OUTPUT_STDERR(...)                                                                                               \
+    {                                                                                                                  \
+        tc_fprintf(stderr, __VA_ARGS__);                                                                               \
+        tc_fprintf(stderr, "\n");                                                                                      \
+        tc_fflush(stderr);                                                                                             \
+    }
+
 #endif
