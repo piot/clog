@@ -7,6 +7,6 @@
 
 #include <clog/clog.h>
 
-void clog_console(enum clog_type type, const char* string);
+void clog_console(enum clog_type type, const char* prefix, const char* string);
 
 #endif

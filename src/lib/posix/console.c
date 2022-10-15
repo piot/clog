@@ -34,7 +34,7 @@ int gettimeofday(struct timeval* tp, struct timezone* tzp)
 
 static const int level_colors[] = {34, 36, 94, 36, 33, 31, 35};
 
-void clog_console(enum clog_type type, const char* string)
+void clog_console(enum clog_type type, const char* prefix, const char* string)
 {
 	char buffer[32];
 	struct timeval now;
@@ -53,7 +53,7 @@ void clog_console(enum clog_type type, const char* string)
 		snprintf(buffer, 32,"%s.%03d", time_buffer, millisecond);
 	}
 
-	fprintf(stderr, "\033[%dm%s %s: %s \033[0m\n", level_colors[type], buffer,
-			clog_type_string[type], string);
+	fprintf(stderr, "\033[%dm%s %s: [%s] %s \033[0m\n", level_colors[type], buffer,
+			clog_type_string[type], prefix, string);
     fflush(stderr);
 }

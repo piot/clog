@@ -20,13 +20,24 @@ enum clog_type {
     CLOG_TYPE_FATAL
 };
 
+
+
+
 static const char* clog_type_string[] = {"VERBOSE", "TRACE", "DEBUG", "INFO", "WARN", "ERROR", "FATAL"};
 
 typedef struct clog_config {
-    void (*log)(enum clog_type type, const char* string);
+    void (*log)(enum clog_type type, const char* prefix, const char* string);
 } clog_config;
 
+typedef struct Clog {
+    const char* constantPrefix;
+    clog_config* config;
+} Clog;
+
 extern clog_config g_clog;
+
+void clogInitFromGlobal(Clog* self, const char* constantPrefix);
+
 #define CLOG_TEMP_STR_SIZE (128*1024)
 
 #ifndef TORNADO_OS_WINDOWS
@@ -39,13 +50,23 @@ extern char g_clog_temp_str[];
 
 #define CLOG_BREAK abort()
 
+#define CLOG_C_EX(logtype, logger, ...)                                                                                          \
+    {                                                                                                                  \
+        int _err = CLOG_PLATFORM_SPRINTF_S(g_clog_temp_str, CLOG_TEMP_STR_SIZE, __VA_ARGS__);                           \
+        if (_err < 0) {                                                                                                 \
+            CLOG_BREAK;                                                                                                               \
+        }                                                                                                               \
+        (logger)->config->log(logtype, (logger)->constantPrefix, g_clog_temp_str);                                                                                \
+    }
+
+
 #define CLOG_EX(logtype, ...)                                                                                          \
     {                                                                                                                  \
         int _err = CLOG_PLATFORM_SPRINTF_S(g_clog_temp_str, CLOG_TEMP_STR_SIZE, __VA_ARGS__);                           \
         if (_err < 0) {                                                                                                 \
             CLOG_BREAK;                                                                                                               \
         }                                                                                                               \
-        g_clog.log(logtype, g_clog_temp_str);                                                                                \
+        g_clog.log(logtype, "", g_clog_temp_str);                                                                                \
     }
 
 #if defined CONFIGURATION_DEBUG
@@ -55,6 +76,9 @@ extern char g_clog_temp_str[];
 #define CLOG_DEBUG(...) CLOG_EX(CLOG_TYPE_DEBUG, __VA_ARGS__)
 #define CLOG_WARN(...) CLOG_EX(CLOG_TYPE_WARN, __VA_ARGS__)
 #define CLOG_SOFT_ERROR(...) CLOG_WARN(__VA_ARGS__);
+#define CLOG_NOTICE(...) CLOG_EX(CLOG_TYPE_WARN, __VA_ARGS__)
+
+#define CLOG_C_VERBOSE(logger, ...) CLOG_C_EX(CLOG_TYPE_VERBOSE, (logger), __VA_ARGS__)
 
 #define CLOG_ERROR(...)                                                                                                \
     CLOG_EX(CLOG_TYPE_ERROR, __VA_ARGS__);                                                                             \
@@ -73,12 +97,15 @@ extern char g_clog_temp_str[];
 #define CLOG_DEBUG(...)
 #define CLOG_WARN(...)
 #define CLOG_SOFT_ERROR(...) CLOG_EX(CLOG_TYPE_ERROR, __VA_ARGS__);
+#define CLOG_NOTIC(...) CLOG_EX(CLOG_TYPE_ERROR, __VA_ARGS__);
 #define CLOG_BREAK abort()
 #define CLOG_ERROR(...)                                                                                                \
     CLOG_EX(CLOG_TYPE_ERROR, __VA_ARGS__);                                                                             \
     CLOG_BREAK;
 
 #define CLOG_ASSERT(expression, ...)
+
+#define CLOG_C_VERBOSE(logger, ...) CLOG_C_EX(CLOG_TYPE_VERBOSE, (logger), __VA_ARGS__)
 
 #endif
 
@@ -97,3 +124,5 @@ extern char g_clog_temp_str[];
     }
 
 #endif
+
+
