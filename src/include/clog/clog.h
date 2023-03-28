@@ -21,8 +21,6 @@ enum clog_type {
 };
 
 
-
-
 static const char* clog_type_string[] = {"VERBOSE", "TRACE", "DEBUG", "INFO", "WARN", "ERROR", "FATAL"};
 
 typedef struct clog_config {
@@ -72,6 +70,7 @@ extern char g_clog_temp_str[];
 #if defined CONFIGURATION_DEBUG
 #define CLOG_LOG_ENABLED 1
 #define CLOG_VERBOSE(...) CLOG_EX(CLOG_TYPE_VERBOSE, __VA_ARGS__)
+#define CLOG_EXECUTE(something) something
 #define CLOG_INFO(...) CLOG_EX(CLOG_TYPE_INFO, __VA_ARGS__)
 #define CLOG_DEBUG(...) CLOG_EX(CLOG_TYPE_DEBUG, __VA_ARGS__)
 #define CLOG_WARN(...) CLOG_EX(CLOG_TYPE_WARN, __VA_ARGS__)
@@ -97,7 +96,7 @@ extern char g_clog_temp_str[];
 #define CLOG_DEBUG(...)
 #define CLOG_WARN(...)
 #define CLOG_SOFT_ERROR(...) CLOG_EX(CLOG_TYPE_ERROR, __VA_ARGS__);
-#define CLOG_NOTIC(...) CLOG_EX(CLOG_TYPE_ERROR, __VA_ARGS__);
+#define CLOG_NOTICE(...)
 #define CLOG_BREAK abort()
 #define CLOG_ERROR(...)                                                                                                \
     CLOG_EX(CLOG_TYPE_ERROR, __VA_ARGS__);                                                                             \
@@ -105,7 +104,9 @@ extern char g_clog_temp_str[];
 
 #define CLOG_ASSERT(expression, ...)
 
-#define CLOG_C_VERBOSE(logger, ...) CLOG_C_EX(CLOG_TYPE_VERBOSE, (logger), __VA_ARGS__)
+#define CLOG_C_VERBOSE(logger, ...)
+#define CLOG_EXECUTE(something)
+
 
 #endif
 
@@ -124,5 +125,3 @@ extern char g_clog_temp_str[];
     }
 
 #endif
-
-
