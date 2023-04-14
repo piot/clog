@@ -15,13 +15,14 @@ enum clog_type {
     CLOG_TYPE_TRACE,
     CLOG_TYPE_DEBUG,
     CLOG_TYPE_INFO,
+    CLOG_TYPE_NOTICE,
     CLOG_TYPE_WARN,
     CLOG_TYPE_ERROR,
     CLOG_TYPE_FATAL
 };
 
 
-static const char* clog_type_string[] = {"VERBOSE", "TRACE", "DEBUG", "INFO", "WARN", "ERROR", "FATAL"};
+static const char* clog_type_string[] = {"VERBOSE", "TRACE", "DEBUG", "INFO", "NOTICE", "WARN", "ERROR", "FATAL"};
 
 typedef struct clog_config {
     void (*log)(enum clog_type type, const char* prefix, const char* string);
@@ -75,7 +76,7 @@ extern char g_clog_temp_str[];
 #define CLOG_DEBUG(...) CLOG_EX(CLOG_TYPE_DEBUG, __VA_ARGS__)
 #define CLOG_WARN(...) CLOG_EX(CLOG_TYPE_WARN, __VA_ARGS__)
 #define CLOG_SOFT_ERROR(...) CLOG_WARN(__VA_ARGS__);
-#define CLOG_NOTICE(...) CLOG_EX(CLOG_TYPE_WARN, __VA_ARGS__)
+#define CLOG_NOTICE(...) CLOG_EX(CLOG_TYPE_NOTICE, __VA_ARGS__)
 
 #define CLOG_C_VERBOSE(logger, ...) CLOG_C_EX(CLOG_TYPE_VERBOSE, (logger), __VA_ARGS__)
 

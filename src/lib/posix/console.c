@@ -32,7 +32,16 @@ int gettimeofday(struct timeval* tp, struct timezone* tzp)
 #endif
 #include <time.h>
 
-static const int level_colors[] = {34, 36, 94, 36, 33, 31, 35};
+static const int level_colors[] = {
+        34, // VERBOSE
+        36, // TRACE
+        94, // DEBUG
+        36, // INFO
+        95, // NOTICE
+        33, // WARN
+        31, // ERROR
+        35  // FATAL
+};
 
 void clog_console(enum clog_type type, const char* prefix, const char* string)
 {
@@ -48,7 +57,7 @@ void clog_console(enum clog_type type, const char* prefix, const char* string)
 		char time_buffer[32];
 		strftime(time_buffer, 32, "%Y-%m-%d %H:%M:%S", tm_now);
 
-		int millisecond = now.tv_usec / 1000.0;
+		int millisecond = (int)(now.tv_usec / 1000.0);
 
 		snprintf(buffer, 32,"%s.%03d", time_buffer, millisecond);
 	}
