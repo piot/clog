@@ -21,7 +21,6 @@ enum clog_type {
     CLOG_TYPE_FATAL
 };
 
-
 static const char* clog_type_string[] = {"VERBOSE", "TRACE", "DEBUG", "INFO", "NOTICE", "WARN", "ERROR", "FATAL"};
 
 typedef struct clog_config {
@@ -37,10 +36,10 @@ extern clog_config g_clog;
 
 void clogInitFromGlobal(Clog* self, const char* constantPrefix);
 
-#define CLOG_TEMP_STR_SIZE (128*1024)
+#define CLOG_TEMP_STR_SIZE (128 * 1024)
 
 #ifndef TORNADO_OS_WINDOWS
-#define CLOG_PLATFORM_SPRINTF_S(target, size, ...) sprintf(target,  __VA_ARGS__)
+#define CLOG_PLATFORM_SPRINTF_S(target, size, ...) sprintf(target, __VA_ARGS__)
 #else
 #define CLOG_PLATFORM_SPRINTF_S sprintf_s
 #endif
@@ -49,23 +48,22 @@ extern char g_clog_temp_str[];
 
 #define CLOG_BREAK abort()
 
-#define CLOG_C_EX(logtype, logger, ...)                                                                                          \
+#define CLOG_C_EX(logtype, logger, ...)                                                                                \
     {                                                                                                                  \
-        int _err = CLOG_PLATFORM_SPRINTF_S(g_clog_temp_str, CLOG_TEMP_STR_SIZE, __VA_ARGS__);                           \
-        if (_err < 0) {                                                                                                 \
-            CLOG_BREAK;                                                                                                               \
-        }                                                                                                               \
-        (logger)->config->log(logtype, (logger)->constantPrefix, g_clog_temp_str);                                                                                \
+        int _err = CLOG_PLATFORM_SPRINTF_S(g_clog_temp_str, CLOG_TEMP_STR_SIZE, __VA_ARGS__);                          \
+        if (_err < 0) {                                                                                                \
+            CLOG_BREAK;                                                                                                \
+        }                                                                                                              \
+        (logger)->config->log(logtype, (logger)->constantPrefix, g_clog_temp_str);                                     \
     }
-
 
 #define CLOG_EX(logtype, ...)                                                                                          \
     {                                                                                                                  \
-        int _err = CLOG_PLATFORM_SPRINTF_S(g_clog_temp_str, CLOG_TEMP_STR_SIZE, __VA_ARGS__);                           \
-        if (_err < 0) {                                                                                                 \
-            CLOG_BREAK;                                                                                                               \
-        }                                                                                                               \
-        g_clog.log(logtype, "", g_clog_temp_str);                                                                                \
+        int _err = CLOG_PLATFORM_SPRINTF_S(g_clog_temp_str, CLOG_TEMP_STR_SIZE, __VA_ARGS__);                          \
+        if (_err < 0) {                                                                                                \
+            CLOG_BREAK;                                                                                                \
+        }                                                                                                              \
+        g_clog.log(logtype, "", g_clog_temp_str);                                                                      \
     }
 
 #if defined CONFIGURATION_DEBUG
@@ -79,6 +77,15 @@ extern char g_clog_temp_str[];
 #define CLOG_NOTICE(...) CLOG_EX(CLOG_TYPE_NOTICE, __VA_ARGS__)
 
 #define CLOG_C_VERBOSE(logger, ...) CLOG_C_EX(CLOG_TYPE_VERBOSE, (logger), __VA_ARGS__)
+#define CLOG_C_INFO(logger, ...) CLOG_C_EX(CLOG_TYPE_INFO, (logger), __VA_ARGS__)
+#define CLOG_C_DEBUG(logger, ...) CLOG_C_EX(CLOG_TYPE_DEBUG, (logger), __VA_ARGS__)
+#define CLOG_C_WARN(logger, ...) CLOG_C_EX(CLOG_TYPE_WARN, (logger), __VA_ARGS__)
+#define CLOG_C_SOFT_ERROR(logger, ...) CLOG_C_EX(CLOG_TYPE_WARN, (logger), __VA_ARGS__)
+#define CLOG_C_NOTICE(logger, ...) CLOG_C_EX(CLOG_TYPE_NOTICE, (logger), __VA_ARGS__)
+#define CLOG_C_ERROR(logger, ...)                                                                                      \
+    CLOG_C_EX(CLOG_TYPE_ERROR, (logger), __VA_ARGS__)                                                                  \
+    CLOG_OUTPUT(__VA_ARGS__);                                                                                          \
+    CLOG_BREAK;
 
 #define CLOG_ERROR(...)                                                                                                \
     CLOG_EX(CLOG_TYPE_ERROR, __VA_ARGS__);                                                                             \
@@ -106,8 +113,14 @@ extern char g_clog_temp_str[];
 #define CLOG_ASSERT(expression, ...)
 
 #define CLOG_C_VERBOSE(logger, ...)
-#define CLOG_EXECUTE(something)
+#define CLOG_C_VERBOSE(logger, ...)
+#define CLOG_C_INFO(logger, ...)
+#define CLOG_C_DEBUG(logger, ...)
+#define CLOG_C_WARN(logger, ...)
+#define CLOG_C_SOFT_ERROR(logger, ...)
+#define CLOG_C_NOTICE(logger, ...)
 
+#define CLOG_EXECUTE(something)
 
 #endif
 
@@ -118,7 +131,7 @@ extern char g_clog_temp_str[];
         tc_fflush(stdout);                                                                                             \
     }
 
-#define CLOG_OUTPUT_STDERR(...)                                                                                               \
+#define CLOG_OUTPUT_STDERR(...)                                                                                        \
     {                                                                                                                  \
         tc_fprintf(stderr, __VA_ARGS__);                                                                               \
         tc_fprintf(stderr, "\n");                                                                                      \
