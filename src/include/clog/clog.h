@@ -118,6 +118,10 @@ extern char g_clog_temp_str[];
 #define CLOG_C_DEBUG(logger, ...)
 #define CLOG_C_WARN(logger, ...)
 #define CLOG_C_SOFT_ERROR(logger, ...)
+#define CLOG_C_ERROR(logger, ...)                                                                                      \
+    CLOG_C_EX(CLOG_TYPE_ERROR, (logger), __VA_ARGS__);                                                                 \
+    CLOG_BREAK;
+
 #define CLOG_C_NOTICE(logger, ...)
 
 #define CLOG_EXECUTE(something)
