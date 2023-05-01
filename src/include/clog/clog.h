@@ -25,6 +25,7 @@ static const char* clog_type_string[] = {"VERBOSE", "TRACE", "DEBUG", "INFO", "N
 
 typedef struct clog_config {
     void (*log)(enum clog_type type, const char* prefix, const char* string);
+    enum clog_type level;
 } clog_config;
 
 typedef struct Clog {
@@ -50,20 +51,24 @@ extern char g_clog_temp_str[];
 
 #define CLOG_C_EX(logtype, logger, ...)                                                                                \
     {                                                                                                                  \
-        int _err = CLOG_PLATFORM_SPRINTF_S(g_clog_temp_str, CLOG_TEMP_STR_SIZE, __VA_ARGS__);                          \
-        if (_err < 0) {                                                                                                \
-            CLOG_BREAK;                                                                                                \
+        if (logtype >= g_clog.level) {                                                                                 \
+            int _err = CLOG_PLATFORM_SPRINTF_S(g_clog_temp_str, CLOG_TEMP_STR_SIZE, __VA_ARGS__);                      \
+            if (_err < 0) {                                                                                            \
+                CLOG_BREAK;                                                                                            \
+            }                                                                                                          \
+            (logger)->config->log(logtype, (logger)->constantPrefix, g_clog_temp_str);                                 \
         }                                                                                                              \
-        (logger)->config->log(logtype, (logger)->constantPrefix, g_clog_temp_str);                                     \
     }
 
 #define CLOG_EX(logtype, ...)                                                                                          \
     {                                                                                                                  \
-        int _err = CLOG_PLATFORM_SPRINTF_S(g_clog_temp_str, CLOG_TEMP_STR_SIZE, __VA_ARGS__);                          \
-        if (_err < 0) {                                                                                                \
-            CLOG_BREAK;                                                                                                \
+        if (logtype >= g_clog.level) {                                                                                 \
+            int _err = CLOG_PLATFORM_SPRINTF_S(g_clog_temp_str, CLOG_TEMP_STR_SIZE, __VA_ARGS__);                      \
+            if (_err < 0) {                                                                                            \
+                CLOG_BREAK;                                                                                            \
+            }                                                                                                          \
+            g_clog.log(logtype, "", g_clog_temp_str);                                                                  \
         }                                                                                                              \
-        g_clog.log(logtype, "", g_clog_temp_str);                                                                      \
     }
 
 #if defined CONFIGURATION_DEBUG
