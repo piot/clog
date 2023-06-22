@@ -39,11 +39,7 @@ void clogInitFromGlobal(Clog* self, const char* constantPrefix);
 
 #define CLOG_TEMP_STR_SIZE (128 * 1024)
 
-#ifndef TORNADO_OS_WINDOWS
-#define CLOG_PLATFORM_SPRINTF_S(target, size, ...) sprintf(target, __VA_ARGS__)
-#else
-#define CLOG_PLATFORM_SPRINTF_S sprintf_s
-#endif
+#define CLOG_PLATFORM_SPRINTF_S(target, size, ...) tc_snprintf(target, size, __VA_ARGS__)
 
 extern char g_clog_temp_str[];
 
