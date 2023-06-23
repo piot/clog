@@ -41,28 +41,12 @@ file(GLOB_RECURSE lib_src FOLLOW_SYMLINKS "lib/*.c")
 
 add_library(clog ${lib_src})
 
-# target_compile_definitions(clog PUBLIC _POSIX_C_SOURCE=200112L)
-add_compile_options(
+target_compile_options(
   clog
-  PUBLIC
-  -Wall
-  -Wextra
-  -Wshadow
-  -Wstrict-aliasing
-  -ansi
-  -pedantic
-  -Wno-declaration-after-statement
-  -Wno-extra-semi-stmt
-  -Wno-undef
-  -Wno-unused-variable
-  -Wno-unused-parameter
-  -Wno-padded
-  -Werror=implicit-function-declaration
-  -Werror=incompatible-pointer-types
-  -Werror=missing-prototypes
-  -Werror=int-conversion
-  -Werror=return-type
-  -Werror=incompatible-function-pointer-types)
+  PRIVATE -Weverything -Werror -Wno-padded
+          -Wno-declaration-after-statement # must be bug in clang? shows up even
+                                           # if std=c99
+)
 
 set(deps ../deps/)
 

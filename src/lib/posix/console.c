@@ -5,7 +5,7 @@
 #include <clog/console.h>
 
 #include <stdio.h>
-#if TORNADO_OS_WINDOWS
+#if defined TORNADO_OS_WINDOWS
 
 #include <stdint.h>
 int gettimeofday(struct timeval* tp, struct timezone* tzp)
