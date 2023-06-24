@@ -57,7 +57,7 @@ void clog_console(enum clog_type type, const char* prefix, const char* string)
 		char time_buffer[32];
 		strftime(time_buffer, 32, "%Y-%m-%d %H:%M:%S", tm_now);
 
-		int millisecond = (int)(now.tv_usec / 1000.0);
+		int millisecond = (int)(now.tv_usec / 1000);
 
 		snprintf(buffer, 32,"%s.%03d", time_buffer, millisecond);
 	}

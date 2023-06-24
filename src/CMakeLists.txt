@@ -2,7 +2,6 @@ cmake_minimum_required(VERSION 3.16.3)
 project(clog C)
 
 set(CMAKE_C_STANDARD 99)
-# set(CMAKE_C_COMPILER_NAMES clang)
 set(CMAKE_VERBOSE_MAKEFILE on)
 
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
@@ -12,6 +11,17 @@ else()
 endif()
 
 message("isDebug: ${isDebug}")
+
+if(CMAKE_C_COMPILER_ID MATCHES "Clang")
+  set(COMPILER_NAME "clang")
+  set(COMPILER_CLANG 1)
+elseif(CMAKE_C_COMPILER_ID STREQUAL "GNU")
+  set(COMPILER_NAME "gcc")
+  set(COMPILER_GCC 1)
+elseif(CMAKE_C_COMPILER_ID STREQUAL "MSVC")
+  set(COMPILER_NAME "msvc")
+  set(COMPILER_MSVC 1)
+endif()
 
 set(useSanitizers ${isDebug})
 message("useSanitizers: ${useSanitizers}")
@@ -41,12 +51,39 @@ file(GLOB_RECURSE lib_src FOLLOW_SYMLINKS "lib/*.c")
 
 add_library(clog ${lib_src})
 
-target_compile_options(
-  clog
-  PRIVATE -Weverything -Werror -Wno-padded
-          -Wno-declaration-after-statement # must be bug in clang? shows up even
-                                           # if std=c99
-)
+if(COMPILER_CLANG)
+  target_compile_options(
+    clog
+    PRIVATE -Weverything -Werror -Wno-padded
+            -Wno-declaration-after-statement # must be bug in clang? shows up
+                                             # even if std=c99
+  )
+elseif(COMPILER_MSVC)
+  target_compile_options(
+    clog
+    PRIVATE /F
+            5000000
+            /Wall
+            /wd4668
+            /wd4820
+            /wd4100
+            /wd4710
+            /wd4711
+            /wd5945
+            /wd5105
+            /wd5045
+            /we4047
+            /we4255
+            /we4013
+            /we4020
+            /we4474
+            /we4477
+            /we4057
+            /we4101
+            /we4189) # /WX
+else()
+  target_compile_options(clog PRIVATE -Wall)
+endif()
 
 set(deps ../deps/)
 
