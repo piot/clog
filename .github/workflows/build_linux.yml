@@ -41,4 +41,4 @@ jobs:
         with:
           name: clog Linux Library
           path: |
-            src/libclog.a
+            src/lib/libclog.a
