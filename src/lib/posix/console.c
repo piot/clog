@@ -61,6 +61,9 @@ void clog_console(enum clog_type type, const char* prefix, const char* string)
 
 		snprintf(buffer, 32,"%s.%03d", time_buffer, millisecond);
 	}
+    if (type > CLOG_TYPE_FATAL) {
+        CLOG_BREAK;
+    }
 
 	fprintf(stderr, "\033[%dm%s %s: [%s] %s \033[0m\n", level_colors[type], buffer,
 			clog_type_string[type], prefix, string);
