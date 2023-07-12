@@ -89,6 +89,7 @@ function(set_tornado targetName)
               /wd5045 # Compiler will insert Spectre mitigation for memory load
                       # if /Qspectre switch specified
               /wd4005 # Bug in ntstatus.h (macro redefinition)
+              /wd4115 # 'timezone': named type definition in parentheses
     )
   else()
     target_compile_options(${targetName} PRIVATE -Wall)

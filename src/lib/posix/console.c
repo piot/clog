@@ -43,7 +43,6 @@ static struct tm* clog_gmtime_s(const time_t* restrict timer, struct tm* restric
 
 #endif
 
-
 static const int level_colors[] = {
     34, // VERBOSE
     36, // TRACE
@@ -66,7 +65,7 @@ void clog_console(enum clog_type type, const char* prefix, const char* string)
     } else {
         time_t epoch_seconds = now.tv_sec;
         struct tm tm_now;
-        clog_gmtime_s(&epoch_seconds, &tm_now);
+        clog_gmtime_s((const time_t*) &epoch_seconds, &tm_now);
         char time_buffer[32];
         strftime(time_buffer, 32, "%Y-%m-%d %H:%M:%S", &tm_now);
 
