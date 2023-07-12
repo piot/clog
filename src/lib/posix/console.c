@@ -8,6 +8,8 @@
 #include <time.h>
 
 #if defined TORNADO_OS_WINDOWS
+#define WIN32_LEAN_AND_MEAN
+#include <Windows.h>
 
 #include <stdint.h>
 int gettimeofday(struct timeval* tp, struct timezone* tzp)
