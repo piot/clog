@@ -67,8 +67,8 @@ extern char g_clog_temp_str[];
         }                                                                                                              \
     }
 
-#if defined CONFIGURATION_DEBUG
-#define CLOG_LOG_ENABLED 1
+#if defined CLOG_LOG_ENABLED
+
 #define CLOG_VERBOSE(...) CLOG_EX(CLOG_TYPE_VERBOSE, __VA_ARGS__)
 #define CLOG_EXECUTE(something) something
 #define CLOG_INFO(...) CLOG_EX(CLOG_TYPE_INFO, __VA_ARGS__)
