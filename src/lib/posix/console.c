@@ -46,7 +46,7 @@ static struct tm* clog_gmtime_s(const time_t* restrict timer, struct tm* restric
 {
     (void) buf;
     time_t temp = *timer;
-    return gmtime((const time_t*) &temp);
+    return gmtime(&temp);
 }
 
 #endif
