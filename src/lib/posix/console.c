@@ -5,6 +5,8 @@
 #include <clog/console.h>
 
 #include <stdio.h>
+#include <time.h>
+
 #if defined TORNADO_OS_WINDOWS
 
 #include <stdint.h>
@@ -39,7 +41,6 @@ static struct tm* clog_gmtime_s(const time_t* restrict timer, struct tm* restric
 
 #endif
 
-#include <time.h>
 
 static const int level_colors[] = {
     34, // VERBOSE
