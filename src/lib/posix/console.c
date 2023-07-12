@@ -14,6 +14,7 @@
 #include <stdint.h>
 int gettimeofday(struct timeval* tp, struct timezone* tzp)
 {
+    (void) tzp;
     static const uint64_t EPOCH = ((uint64_t) 116444736000000000ULL);
 
     SYSTEMTIME systemTime;
@@ -29,7 +30,13 @@ int gettimeofday(struct timeval* tp, struct timezone* tzp)
 
     return 0;
 }
-#define clog_gmtime_s gmtime_s
+
+static struct tm* clog_gmtime_s(const time_t* restrict timer, struct tm* restrict buf)
+{
+    // Windows has of course reversed the order of the parameters
+    return gmtime_s(buf, timer);
+}
+
 #else
 
 #include <sys/time.h>
@@ -65,7 +72,7 @@ void clog_console(enum clog_type type, const char* prefix, const char* string)
     } else {
         time_t epoch_seconds = now.tv_sec;
         struct tm tm_now;
-        clog_gmtime_s((const time_t*) &epoch_seconds, &tm_now);
+        clog_gmtime_s(&epoch_seconds, &tm_now);
         char time_buffer[32];
         strftime(time_buffer, 32, "%Y-%m-%d %H:%M:%S", &tm_now);
 
