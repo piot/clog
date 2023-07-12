@@ -2,9 +2,9 @@
 deps*/
 build/
 .vscode/
-src/.cmake/api/v1
-src/.idea
-src/Testing/Temporary
-src/.ninja_deps
-src/.ninja_log
-src/build.ninja
+.cmake/api/v1
+.idea
+Testing/
+.ninja_deps
+.ninja_log
+build.ninja
