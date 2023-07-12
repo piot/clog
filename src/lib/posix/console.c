@@ -33,8 +33,9 @@ int gettimeofday(struct timeval* tp, struct timezone* tzp)
 
 static struct tm* clog_gmtime_s(const time_t* restrict timer, struct tm* restrict buf)
 {
-    // Windows has of course reversed the order of the parameters
-    return gmtime_s(buf, timer);
+    // Windows has of course reversed the order of the parameters, and it returns something else
+    gmtime_s(buf, timer);
+    return buf;
 }
 
 #else
