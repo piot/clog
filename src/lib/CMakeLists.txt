@@ -8,6 +8,10 @@ add_library(clog STATIC
 include(Tornado.cmake)
 set_tornado(clog)
 
+if(CONFIGURATION_DEBUG)
+target_compile_definitions(clog PUBLIC CLOG_LOG_ENABLED)
+endif()
+
 target_include_directories(clog PUBLIC ../include)
 
 target_link_libraries(clog 
