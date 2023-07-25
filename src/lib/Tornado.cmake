@@ -18,9 +18,8 @@ function(set_tornado targetName)
     set_local_and_parent(isDebug TRUE)
   else()
     message("detected release build")
-    set(isDebug
-        FALSE
-        PARENT_SCOPE)
+    set_local_and_parent(isDebug
+        FALSE)
   endif()
 
   if(CMAKE_C_COMPILER_ID MATCHES "Clang")
