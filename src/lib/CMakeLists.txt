@@ -8,11 +8,11 @@ add_library(clog STATIC
 include(Tornado.cmake)
 set_tornado(clog)
 
-if(TORNADO_OS_MACOS OR TORNADO_OS_LINUX)
+if(OS_MACOS OR OS_LINUX)
 target_compile_definitions(clog PRIVATE _POSIX_C_SOURCE=200112L)
 endif()
 
-if(CONFIGURATION_DEBUG)
+if(isDebug)
 target_compile_definitions(clog PUBLIC CLOG_LOG_ENABLED)
 endif()
 
